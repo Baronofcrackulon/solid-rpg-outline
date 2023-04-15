@@ -1,0 +1,83 @@
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Set the dimensions of the game window
+win_width = 800
+win_height = 600
+
+# Create the game window
+win = pygame.display.set_mode((win_width, win_height))
+
+# Set the title of the game window
+pygame.display.set_caption("My 2D World")
+
+# Set the color of the background
+bg_color = (0, 0, 0)
+
+# Load the title screen image
+title_screen = pygame.image.load("title_screen.png")
+
+# Load the world map image
+world_map = pygame.image.load("world_map.png")
+
+# Set up the game clock
+clock = pygame.time.Clock()
+
+# Set up a boolean for the game state
+in_title_screen = True
+
+# Main game loop
+while True:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                in_title_screen = False
+    
+    # If in the title screen, display the title screen image
+    if in_title_screen:
+        win.blit(title_screen, (0, 0))
+    # If not in the title screen, display the world map image and allow the player to move around
+    else:
+        # Handle movement
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            # Move the world map to the right
+            world_map_rect.move_ip(5, 0)
+        if keys[pygame.K_RIGHT]:
+            # Move the world map to the left
+            world_map_rect.move_ip(-5, 0)
+        if keys[pygame.K_UP]:
+            # Move the world map up
+            world_map_rect.move_ip(0, 5)
+        if keys[pygame.K_DOWN]:
+            # Move the world map down
+            world_map_rect.move_ip(0, -5)
+        
+        # Check if the world map is out of bounds and adjust if necessary
+        if world_map_rect.left < 0:
+            world_map_rect.left = 0
+        if world_map_rect.right > win_width:
+            world_map_rect.right = win_width
+        if world_map_rect.top < 0:
+            world_map_rect.top = 0
+        if world_map_rect.bottom > win_height:
+            world_map_rect.bottom = win_height
+        
+        # Clear the screen
+        win.fill(bg_color)
+        
+        # Draw the world map image
+        win.blit(world_map, world_map_rect)
+    
+    # Update the display
+    pygame.display.update()
+    
+    # Set the game clock
+    clock.tick(60)
